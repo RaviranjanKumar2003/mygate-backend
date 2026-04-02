@@ -66,11 +66,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = null;
         String token = null;
 
-        // ✅ ADD THIS BLOCK HERE
-        if (header == null || !header.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         try {
             if (header != null && header.startsWith("Bearer ")) {
