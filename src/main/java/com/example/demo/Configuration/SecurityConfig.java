@@ -2,6 +2,7 @@ package com.example.demo.Configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,7 +24,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    // ✅ Constructor Injection (BEST)
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
@@ -39,32 +39,42 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // JWT filter rehne do (abhi block nahi karega)
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 )
 
-                // 🔓 EVERYTHING PERMITTED
                 .authorizeHttpRequests(auth -> auth
+                        // ✅ VERY IMPORTANT (preflight fix)
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // ✅ allow all APIs
                         .anyRequest().permitAll()
                 );
 
         return http.build();
     }
 
-
-    // ================= CORS =================
+    // ✅ FINAL CORS CONFIG
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+
+        // ✅ ALLOW YOUR FRONTEND
         config.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "https://mygateui.netlify.app"
         ));
-        config.setAllowCredentials(true);
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // ✅ REQUIRED METHODS
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
+
+        // ✅ HEADERS
         config.setAllowedHeaders(List.of("*"));
+
+        // ✅ IMPORTANT
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -72,7 +82,7 @@ public class SecurityConfig {
         return source;
     }
 
-    // ================= PASSWORD =================
+    // ✅ PASSWORD
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
