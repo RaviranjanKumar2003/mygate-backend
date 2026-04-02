@@ -56,26 +56,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // 🔓 DEVELOPMENT MODE: bypass JWT for public endpoints
+        // ✅ bypass public APIs
         if (isPublicUrl(path)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // ---------------- JWT Validation -----------------
         String header = request.getHeader("Authorization");
         String username = null;
         String token = null;
 
-        if (header != null && header.startsWith("Bearer ")) {
-            token = header.substring(7);
-            username = jwtTokenHelper.getUsernameFromToken(token);
+
+        try {
+            if (header != null && header.startsWith("Bearer ")) {
+                token = header.substring(7);
+
+                // 🔥 risky line wrapped in try-catch
+                username = jwtTokenHelper.getUsernameFromToken(token);
+            }
+        } catch (Exception e) {
+            System.out.println("JWT Error: " + e.getMessage());
         }
 
+        // ✅ safe authentication
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
             if (jwtTokenHelper.validateToken(token, userDetails)) {
+
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
