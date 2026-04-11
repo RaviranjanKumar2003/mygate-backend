@@ -77,9 +77,9 @@ public class SocietyChatController {
     public String hardDelete(
             @PathVariable Integer societyId,
             @PathVariable Integer messageId,
-            @RequestBody SocietyChatDto dto) {
+            @RequestParam Integer senderId) {   // ✅ FIX
 
-        chatService.hardDeleteMessage(societyId, messageId, dto.getSenderId());
+        chatService.hardDeleteMessage(societyId, messageId, senderId);
 
         return "Message deleted for everyone";
     }

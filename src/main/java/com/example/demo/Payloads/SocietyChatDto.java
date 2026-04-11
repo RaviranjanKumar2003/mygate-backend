@@ -27,6 +27,8 @@ public class SocietyChatDto {
 
     private Long tempId;
 
+    private String fileType;
+
 
 // GETTERS & SETTERS & CONSTRUCTOR
 
@@ -51,6 +53,14 @@ public class SocietyChatDto {
         this.userType = userType;
         this.message = message;
         this.createdAt = createdAt;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 
     public Long getTempId() {

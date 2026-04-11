@@ -29,8 +29,9 @@ public class SocietyChatServiceImpl implements SocietyChatService {
     @Override
     public SocietyChatDto sendMessage(SocietyChatDto dto) {
 
-        if (dto.getMessage() == null || dto.getMessage().trim().isEmpty()) {
-            throw new RuntimeException("Message cannot be empty");
+        if ((dto.getMessage() == null || dto.getMessage().trim().isEmpty())
+                && dto.getFileType() == null) {
+            throw new RuntimeException("Message or file required");
         }
 
         SocietyChat chat = new SocietyChat();
@@ -40,7 +41,10 @@ public class SocietyChatServiceImpl implements SocietyChatService {
         chat.setSenderName(dto.getSenderName());
         chat.setRole(dto.getRole());
         chat.setUserType(dto.getUserType());
-        chat.setMessage(dto.getMessage().trim());
+        chat.setMessage(
+                dto.getMessage() != null ? dto.getMessage().trim() : null
+        );
+        chat.setFileType(dto.getFileType());   // ⭐ ADD THIS
         chat.setCreatedAt(
                 ZonedDateTime.now(ZoneId.of("Asia/Kolkata")).toLocalDateTime()
         );
@@ -84,6 +88,10 @@ public class SocietyChatServiceImpl implements SocietyChatService {
             // Handle deleted messages
             String messageText = chat.getMessage();
 
+            if (messageText == null) {
+                messageText = "";
+            }
+
             if (chat.isDeletedForEveryone() ||
                     chat.getDeletedForUsers().contains(userId)) {
                 messageText = "This message was deleted";
@@ -99,6 +107,7 @@ public class SocietyChatServiceImpl implements SocietyChatService {
                     messageText,
                     chat.getCreatedAt()
             );
+            dto.setFileType(chat.getFileType());   // ⭐ IMPORTANT
 
             // Add reactions
             dto.setReactions(
@@ -189,6 +198,8 @@ public class SocietyChatServiceImpl implements SocietyChatService {
         }
 
         chat.setDeletedForEveryone(true);
+        chat.setMessage(null);
+        chat.setFileType(null);
 
         chatRepository.save(chat);
     }
@@ -199,7 +210,7 @@ public class SocietyChatServiceImpl implements SocietyChatService {
     @Override
     public void markMessagesAsSeen(Integer societyId, Integer userId) {
 
-        List<SocietyChat> messages = chatRepository.findBySocietyId(societyId);
+        List<SocietyChat> messages = chatRepository.findBySocietyIdOrderByCreatedAtAsc(societyId);
 
         List<SocietyChat> updatedMessages = new ArrayList<>();
 
@@ -234,6 +245,7 @@ public class SocietyChatServiceImpl implements SocietyChatService {
         dto.setUserType(chat.getUserType());
         dto.setMessage(chat.getMessage());
         dto.setCreatedAt(chat.getCreatedAt());
+        dto.setFileType(chat.getFileType());
 
         return dto;
     }

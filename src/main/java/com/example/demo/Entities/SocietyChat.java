@@ -54,9 +54,20 @@ public class SocietyChat {
     @ElementCollection
     private Set<Integer> seenByUsers = new HashSet<>();
 
+    @Column(name = "file_type")
+    private String fileType;
+
 
 // GETTERS & SETTERS
 
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
 
     public Set<Integer> getSeenByUsers() {
         return seenByUsers;
