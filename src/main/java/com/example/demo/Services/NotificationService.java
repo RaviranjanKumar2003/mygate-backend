@@ -17,7 +17,7 @@ public interface NotificationService {
     // Fetch notifications for any user based on role and societyId
     List<NotificationDto> getNotificationsForUser(Integer societyId, String userRole);
 
-    void markAsRead(Long notificationId);
+    void markAsRead(Integer notificationId);
 
-    void deleteNotificationByNoticeId(Integer noticeId);
+    void deleteNotification(Integer notificationId);
 }

@@ -1,5 +1,7 @@
 package com.example.demo.ECommerce.Eentities;
 
+import com.example.demo.Entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,6 +35,11 @@ public class Product {
     @Column(name = "cod_available")
     private Boolean codAvailable = true;  // ✅ Boolean use karo
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sellerId", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"society","staff","flat","floor","building"})
+    private User seller;
+
 // Constructors
     public Product() {}
 
@@ -51,6 +58,14 @@ public class Product {
 
 // Getters & Setters
 
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
+    }
 
     public Boolean getCodAvailable() {
         return codAvailable;

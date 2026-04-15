@@ -44,10 +44,19 @@ public class Notification {
     @JoinColumn(name = "notice_id")
     private Notice notice;
 
+    private boolean deleted = false;
 
 
 // GETTERS & SETTERS
 
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public Notice getNotice() {
         return notice;

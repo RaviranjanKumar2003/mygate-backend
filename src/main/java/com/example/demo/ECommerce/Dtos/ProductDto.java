@@ -17,6 +17,10 @@ public class ProductDto {
 
     private Boolean codAvailable;
 
+    private String sellerName;
+    private String sellerEmail;
+    private String sellerMobile;
+
 // Constructors
     public ProductDto() {}
 
@@ -35,6 +39,30 @@ public class ProductDto {
 
 // Getters & Setters
 
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
+    }
+
+    public String getSellerMobile() {
+        return sellerMobile;
+    }
+
+    public void setSellerMobile(String sellerMobile) {
+        this.sellerMobile = sellerMobile;
+    }
 
     public Boolean getCodAvailable() {
         return codAvailable;

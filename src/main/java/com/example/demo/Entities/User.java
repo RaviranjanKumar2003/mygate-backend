@@ -1,12 +1,12 @@
 package com.example.demo.Entities;
 
-import com.example.demo.Enums.NormalUserType;
 import com.example.demo.Enums.UserRole;
 import com.example.demo.Enums.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(
@@ -60,21 +60,26 @@ public class User {
         }
     }
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "society_id")
     private Society society;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Staff staff;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "flat_id")
     private Flat flat;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "floor_id")
     private Floor floor;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "building_id")
     private Building building;

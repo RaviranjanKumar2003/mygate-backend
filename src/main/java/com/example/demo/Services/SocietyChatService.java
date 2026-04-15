@@ -3,6 +3,7 @@ package com.example.demo.Services;
 import com.example.demo.Payloads.SocietyChatDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SocietyChatService {
 
@@ -23,5 +24,7 @@ public interface SocietyChatService {
 
     // MARK AS SEEN
     void markMessagesAsSeen(Integer societyId, Integer userId);
+
+    List<Map<String, Object>> getSeenUsers(Integer messageId);
 
 }

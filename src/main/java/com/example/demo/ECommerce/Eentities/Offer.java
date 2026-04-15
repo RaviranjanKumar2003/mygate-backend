@@ -10,24 +10,37 @@ public class Offer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private Long productId;      // Which product this offer is for
-    private Long buyerId;        // Member placing the offer
+    @Column(name = "product_id", insertable = false, updatable = false)
+    private Integer productId;      // Which product this offer is for
+    private Integer buyerId;        // Member placing the offer
     private BigDecimal offerPrice;
 
     private LocalDateTime offerTime;
 
     private String status;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+// CONSTRUCTORS
     public Offer() {}
 
-    public Offer(Long id, Long productId, Long buyerId, BigDecimal offerPrice, LocalDateTime offerTime) {
+    public Offer(Integer id, Integer productId, Integer buyerId, BigDecimal offerPrice, LocalDateTime offerTime) {
         this.id = id;
         this.productId = productId;
         this.buyerId = buyerId;
         this.offerPrice = offerPrice;
         this.offerTime = offerTime;
+    }
+
+// GETTERS & SETTERS
+
+
+    public Product getProduct() {
+        return product;
     }
 
     public String getStatus() {
@@ -38,14 +51,29 @@ public class Offer {
         this.status = status;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public Long getProductId() { return productId; }
-    public void setProductId(Long productId) { this.productId = productId; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public Long getBuyerId() { return buyerId; }
-    public void setBuyerId(Long buyerId) { this.buyerId = buyerId; }
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public Integer getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(Integer buyerId) {
+        this.buyerId = buyerId;
+    }
 
     public BigDecimal getOfferPrice() { return offerPrice; }
     public void setOfferPrice(BigDecimal offerPrice) { this.offerPrice = offerPrice; }

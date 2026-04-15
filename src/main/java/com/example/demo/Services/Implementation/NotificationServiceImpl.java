@@ -1,13 +1,13 @@
 package com.example.demo.Services.Implementation;
 
 import com.example.demo.Entities.Notification;
-import com.example.demo.Enums.NotificationType;
 import com.example.demo.Payloads.NotificationDto;
 import com.example.demo.Repositories.NotificationRepository;
 import com.example.demo.Services.NotificationService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +24,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
 
 // CREATE NOTIFICATION
 //    @Override
@@ -36,16 +39,23 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void createNotification(NotificationDto dto) {
+
         Notification notification = modelMapper.map(dto, Notification.class);
 
-        // 🔥 IMPORTANT
         if (notification.getType() == null) {
             throw new RuntimeException("Notification type is required");
         }
 
         notification.setRead(false);
         notification.setCreatedAt(LocalDateTime.now());
-        notificationRepository.save(notification);
+
+        Notification saved = notificationRepository.save(notification);
+
+        // 🔥 REAL TIME PUSH
+        messagingTemplate.convertAndSend(
+                "/topic/notifications/" + notification.getTargetRole(),
+                modelMapper.map(saved, NotificationDto.class)
+        );
     }
 
 
@@ -83,19 +93,25 @@ public List<NotificationDto> getNotificationsForUser(
 
 
     @Override
-    @Transactional
-    public void deleteNotificationByNoticeId(Integer noticeId) {
-        notificationRepository.deleteByNotice_Id(noticeId);
+    public void deleteNotification(Integer notificationId) {
+
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new RuntimeException("Notification not found"));
+
+        notificationRepository.delete(notification);
     }
 
 
 
     // MARK AS READ NOTIFICATION
     @Override
-    public void markAsRead(Long notificationId) {
+    public void markAsRead(Integer notificationId) {
         Notification n = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Notification not found"));
         n.setRead(true);
         notificationRepository.save(n);
     }
+
+
+
 }

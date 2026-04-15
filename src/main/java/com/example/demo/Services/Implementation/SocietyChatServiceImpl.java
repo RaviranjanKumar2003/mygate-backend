@@ -1,8 +1,10 @@
 package com.example.demo.Services.Implementation;
 
 import com.example.demo.Entities.SocietyChat;
+import com.example.demo.Entities.User;
 import com.example.demo.Payloads.SocietyChatDto;
 import com.example.demo.Repositories.SocietyChatRepository;
+import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.MessageReactionService;
 import com.example.demo.Services.SocietyChatService;
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
@@ -25,6 +27,9 @@ public class SocietyChatServiceImpl implements SocietyChatService {
     @Lazy
     private MessageReactionService reactionService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     // ✅ SEND MESSAGE
     @Override
     public SocietyChatDto sendMessage(SocietyChatDto dto) {
@@ -41,6 +46,10 @@ public class SocietyChatServiceImpl implements SocietyChatService {
         chat.setSenderName(dto.getSenderName());
         chat.setRole(dto.getRole());
         chat.setUserType(dto.getUserType());
+        chat.setReplyToMessageId(dto.getReplyToMessageId());
+        chat.setReplyToMessageText(dto.getReplyToMessageText());
+        chat.setReplyToSenderName(dto.getReplyToSenderName());
+        chat.setReplyToFileType(dto.getReplyToFileType());
         chat.setMessage(
                 dto.getMessage() != null ? dto.getMessage().trim() : null
         );
@@ -108,6 +117,10 @@ public class SocietyChatServiceImpl implements SocietyChatService {
                     chat.getCreatedAt()
             );
             dto.setFileType(chat.getFileType());   // ⭐ IMPORTANT
+            dto.setReplyToMessageId(chat.getReplyToMessageId());
+            dto.setReplyToMessageText(chat.getReplyToMessageText());
+            dto.setReplyToSenderName(chat.getReplyToSenderName());
+            dto.setReplyToFileType(chat.getReplyToFileType());
 
             // Add reactions
             dto.setReactions(
@@ -232,6 +245,29 @@ public class SocietyChatServiceImpl implements SocietyChatService {
         }
     }
 
+
+    public List<Map<String, Object>> getSeenUsers(Integer messageId) {
+
+        SocietyChat chat = chatRepository.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("Message not found"));
+
+        return chat.getSeenByUsers().stream().map(userId -> {
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("userId", userId);
+
+            // 👉 real user fetch
+            User user = userRepository.findById(userId).orElse(null);
+
+            if (user != null) {
+                map.put("userName", user.getName());
+            }
+
+            return map;
+
+        }).toList();
+    }
+
     // ✅ DTO MAPPER
     private SocietyChatDto mapToDto(SocietyChat chat) {
 
@@ -246,6 +282,14 @@ public class SocietyChatServiceImpl implements SocietyChatService {
         dto.setMessage(chat.getMessage());
         dto.setCreatedAt(chat.getCreatedAt());
         dto.setFileType(chat.getFileType());
+
+        dto.setSeenByUsers(chat.getSeenByUsers());
+
+        dto.setReplyToMessageId(chat.getReplyToMessageId());
+        dto.setReplyToMessageText(chat.getReplyToMessageText());
+        dto.setReplyToSenderName(chat.getReplyToSenderName());
+
+        dto.setReplyToFileType(chat.getReplyToFileType());
 
         return dto;
     }

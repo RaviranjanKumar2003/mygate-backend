@@ -23,18 +23,18 @@ public class OfferController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OfferDto> updateOffer(@PathVariable Long id, @RequestBody OfferDto offerDto) {
+    public ResponseEntity<OfferDto> updateOffer(@PathVariable Integer id, @RequestBody OfferDto offerDto) {
         return ResponseEntity.ok(offerService.updateOffer(id, offerDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteOffer(@PathVariable Long id) {
+    public ResponseEntity<String> deleteOffer(@PathVariable Integer id) {
         offerService.deleteOffer(id);
         return ResponseEntity.ok("Offer deleted successfully");
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OfferDto> getOffer(@PathVariable Long id) {
+    public ResponseEntity<OfferDto> getOffer(@PathVariable Integer id) {
         return ResponseEntity.ok(offerService.getOfferById(id));
     }
 
@@ -44,12 +44,12 @@ public class OfferController {
     }
 
     @GetMapping("/product/{productId}")
-    public ResponseEntity<List<OfferDto>> getOffersByProduct(@PathVariable Long productId) {
+    public ResponseEntity<List<OfferDto>> getOffersByProduct(@PathVariable Integer productId) {
         return ResponseEntity.ok(offerService.getOffersByProduct(productId));
     }
 
     @GetMapping("/buyer/{buyerId}")
-    public ResponseEntity<List<OfferDto>> getOffersByBuyer(@PathVariable Long buyerId) {
+    public ResponseEntity<List<OfferDto>> getOffersByBuyer(@PathVariable Integer buyerId) {
         return ResponseEntity.ok(offerService.getOffersByBuyer(buyerId));
     }
 }

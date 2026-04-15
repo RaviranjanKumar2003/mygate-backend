@@ -5,22 +5,50 @@ import java.time.LocalDateTime;
 
 public class OfferDto {
 
-    private Long id;
-    private Long productId;
-    private Long buyerId;
+    private Integer id;
+    private Integer productId;
+    private Integer buyerId;
     private BigDecimal offerPrice;
     private LocalDateTime offerTime;
 
     private String status;
 
+    private String buyerName;
+    private String buyerEmail;
+    private String buyerMobile;
+
     public OfferDto() {}
 
-    public OfferDto(Long id, Long productId, Long buyerId, BigDecimal offerPrice, LocalDateTime offerTime) {
+    public OfferDto(Integer id, Integer productId, Integer buyerId, BigDecimal offerPrice, LocalDateTime offerTime) {
         this.id = id;
         this.productId = productId;
         this.buyerId = buyerId;
         this.offerPrice = offerPrice;
         this.offerTime = offerTime;
+    }
+
+    public String getBuyerName() {
+        return buyerName;
+    }
+
+    public void setBuyerName(String buyerName) {
+        this.buyerName = buyerName;
+    }
+
+    public String getBuyerEmail() {
+        return buyerEmail;
+    }
+
+    public void setBuyerEmail(String buyerEmail) {
+        this.buyerEmail = buyerEmail;
+    }
+
+    public String getBuyerMobile() {
+        return buyerMobile;
+    }
+
+    public void setBuyerMobile(String buyerMobile) {
+        this.buyerMobile = buyerMobile;
     }
 
     public String getStatus() {
@@ -31,14 +59,29 @@ public class OfferDto {
         this.status = status;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public Long getProductId() { return productId; }
-    public void setProductId(Long productId) { this.productId = productId; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public Long getBuyerId() { return buyerId; }
-    public void setBuyerId(Long buyerId) { this.buyerId = buyerId; }
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public Integer getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(Integer buyerId) {
+        this.buyerId = buyerId;
+    }
 
     public BigDecimal getOfferPrice() { return offerPrice; }
     public void setOfferPrice(BigDecimal offerPrice) { this.offerPrice = offerPrice; }

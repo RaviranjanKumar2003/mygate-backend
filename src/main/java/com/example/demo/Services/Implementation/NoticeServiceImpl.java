@@ -9,10 +9,7 @@ import com.example.demo.Enums.TargetAudience;
 import com.example.demo.Enums.NotificationType;
 import com.example.demo.Exceptions.ResourceNotFoundException;
 import com.example.demo.Payloads.NoticeDto;
-import com.example.demo.Repositories.NoticeRepository;
-import com.example.demo.Repositories.NotificationRepository;
-import com.example.demo.Repositories.SocietyAdminRepository;
-import com.example.demo.Repositories.SocietyRepo;
+import com.example.demo.Repositories.*;
 import com.example.demo.Services.FileService;
 import com.example.demo.Services.NoticeService;
 import com.example.demo.Services.NotificationService;
@@ -57,6 +54,9 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Autowired
     private SocietyRepo societyRepo;
+
+    @Autowired
+    private NoticeSeenRepository noticeSeenRepository;
 
 
     public NoticeServiceImpl(NoticeRepository noticeRepository) {
@@ -183,6 +183,15 @@ public NoticeDto createNotice(
     notification.setTitle(savedNotice.getTitle());
     notification.setMessage("New notice posted by " + savedNotice.getCreatedByName());
     notification.setType(NotificationType.NOTICE);
+
+// ✅ ADD THIS LINE (MOST IMPORTANT)
+    notification.setTargetRole(TargetAudience.ALL.name());
+
+// ✅ ALSO ADD (best practice)
+    notification.setReferenceId(Long.valueOf(savedNotice.getId()));
+    notification.setCreatedAt(LocalDateTime.now());
+    notification.setRead(false);
+
     notification.setTargetSocietyId(savedNotice.getTargetSocietyId());
     notification.setNotice(savedNotice);
 
@@ -354,7 +363,8 @@ public NoticeDto createNotice(
             throw new RuntimeException("Cross society delete not allowed");
 
         // Hard delete
-        notificationService.deleteNotificationByNoticeId(noticeId);
+        noticeSeenRepository.deleteByNoticeId(noticeId);
+        notificationRepository.deleteByNotice_Id(noticeId);
         noticeRepository.delete(notice);
 
     }

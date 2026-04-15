@@ -53,6 +53,15 @@ public class ProductServiceImpl implements ProductService {
                 product.getCodAvailable() != null ? product.getCodAvailable() : true
         );
 
+        if (product.getSellerId() != null) {
+            userRepository.findById(product.getSellerId().intValue())
+                    .ifPresent(user -> {
+                        dto.setSellerName(user.getName());
+                        dto.setSellerEmail(user.getEmail());
+                        dto.setSellerMobile(user.getMobileNumber());
+                    });
+        }
+
         return dto;
     }
 

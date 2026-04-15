@@ -1,14 +1,18 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Entities.SocietyChat;
 import com.example.demo.Payloads.SocietyChatDto;
+import com.example.demo.Repositories.SocietyChatRepository;
 import com.example.demo.Services.SocietyChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/society-chat")
@@ -21,6 +25,10 @@ public class SocietyChatController {
     // Send message
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
+    @Autowired
+    private SocietyChatRepository societyChatRepository;
+
 
     @MessageMapping("/chat.send")
     public void sendMessage(SocietyChatDto dto) {
@@ -92,5 +100,10 @@ public class SocietyChatController {
         chatService.markMessagesAsSeen(societyId, userId);
     }
 
+
+    @GetMapping("/seen-users/{messageId}")
+    public List<Map<String, Object>> getSeenUsers(@PathVariable Integer messageId) {
+        return chatService.getSeenUsers(messageId);
+    }
 
 }

@@ -8,15 +8,15 @@ public interface OfferService {
 
     OfferDto createOffer(OfferDto offerDto);
 
-    OfferDto updateOffer(Long id, OfferDto offerDto);
+    OfferDto updateOffer(Integer id, OfferDto offerDto);
 
-    void deleteOffer(Long id);
+    void deleteOffer(Integer id);
 
-    OfferDto getOfferById(Long id);
+    OfferDto getOfferById(Integer id);
 
     List<OfferDto> getAllOffers();
 
-    List<OfferDto> getOffersByProduct(Long productId);
+    List<OfferDto> getOffersByProduct(Integer productId);
 
-    List<OfferDto> getOffersByBuyer(Long buyerId);
+    List<OfferDto> getOffersByBuyer(Integer buyerId);
 }

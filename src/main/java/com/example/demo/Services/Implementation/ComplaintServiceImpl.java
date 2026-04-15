@@ -104,9 +104,14 @@ public ComplaintDto createComplaint(ComplaintDto dto) {
         notification.setTargetSocietyId(savedComplaint.getSocietyId());
     }
 
+    boolean exists = notificationRepository.existsByReferenceIdAndType(
+            savedComplaint.getId(),
+            NotificationType.COMPLAINT
+    );
 
-    // ================== SAVE NOTIFICATION ==================
-    notificationRepository.save(notification);
+    if (!exists) {
+        notificationRepository.save(notification);
+    }
 
 
     // ================== RETURN DTO ==================

@@ -5,6 +5,7 @@ import com.example.demo.Enums.UserRole;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Set;
 
 public class SocietyChatDto {
 
@@ -25,9 +26,17 @@ public class SocietyChatDto {
 
     private boolean seen;
 
+    private Set<Integer> seenByUsers;
+
     private Long tempId;
 
     private String fileType;
+
+    private Integer replyToMessageId;
+    private String replyToMessageText;
+    private String replyToSenderName;
+
+    private String replyToFileType;
 
 
 // GETTERS & SETTERS & CONSTRUCTOR
@@ -53,6 +62,46 @@ public class SocietyChatDto {
         this.userType = userType;
         this.message = message;
         this.createdAt = createdAt;
+    }
+
+    public String getReplyToFileType() {
+        return replyToFileType;
+    }
+
+    public void setReplyToFileType(String replyToFileType) {
+        this.replyToFileType = replyToFileType;
+    }
+
+    public Integer getReplyToMessageId() {
+        return replyToMessageId;
+    }
+
+    public void setReplyToMessageId(Integer replyToMessageId) {
+        this.replyToMessageId = replyToMessageId;
+    }
+
+    public String getReplyToMessageText() {
+        return replyToMessageText;
+    }
+
+    public void setReplyToMessageText(String replyToMessageText) {
+        this.replyToMessageText = replyToMessageText;
+    }
+
+    public String getReplyToSenderName() {
+        return replyToSenderName;
+    }
+
+    public void setReplyToSenderName(String replyToSenderName) {
+        this.replyToSenderName = replyToSenderName;
+    }
+
+    public Set<Integer> getSeenByUsers() {
+        return seenByUsers;
+    }
+
+    public void setSeenByUsers(Set<Integer> seenByUsers) {
+        this.seenByUsers = seenByUsers;
     }
 
     public String getFileType() {

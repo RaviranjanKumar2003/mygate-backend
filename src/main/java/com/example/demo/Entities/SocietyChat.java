@@ -58,8 +58,47 @@ public class SocietyChat {
     private String fileType;
 
 
+    private Integer replyToMessageId;
+    private String replyToMessageText;
+    private String replyToSenderName;
+
+    private String replyToFileType;
+
+
 // GETTERS & SETTERS
 
+
+    public String getReplyToFileType() {
+        return replyToFileType;
+    }
+
+    public void setReplyToFileType(String replyToFileType) {
+        this.replyToFileType = replyToFileType;
+    }
+
+    public Integer getReplyToMessageId() {
+        return replyToMessageId;
+    }
+
+    public void setReplyToMessageId(Integer replyToMessageId) {
+        this.replyToMessageId = replyToMessageId;
+    }
+
+    public String getReplyToMessageText() {
+        return replyToMessageText;
+    }
+
+    public void setReplyToMessageText(String replyToMessageText) {
+        this.replyToMessageText = replyToMessageText;
+    }
+
+    public String getReplyToSenderName() {
+        return replyToSenderName;
+    }
+
+    public void setReplyToSenderName(String replyToSenderName) {
+        this.replyToSenderName = replyToSenderName;
+    }
 
     public String getFileType() {
         return fileType;
